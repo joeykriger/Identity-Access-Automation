@@ -47,7 +47,7 @@ def main():
     # 1. Create Users
     users = ["Alice", "Bob", "Charlie"]
     for user in users:
-        run_cmd(f"net user {user} Password123! /add")
+        run_cmd(f"net user {user} [boilerplate_password] /add")
     
     # 2. Create Group and Add Users
     run_cmd("net localgroup Finance /add")
@@ -55,7 +55,7 @@ def main():
         run_cmd(f"net localgroup Finance {user} /add")
     
     # 3. Create Directory
-    target_dir = r"C:\FinanceData"
+    target_dir = r"C:\FinancialInfo"
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
         print(f"Created {target_dir}")
@@ -80,7 +80,7 @@ Before running the script, intentionally cause this issue:
 2.  *Theory:* Lacking elevated privileges for `net user`.
 3.  *Test:* Right-click IDE and "Run as Administrator".
 4.  *Plan/Implement:* Re-run script from an elevated prompt.
-5.  *Verify:* Check `C:\FinanceData` properties via command line (`icacls C:\FinanceData`).
+5.  *Verify:* Check `C:\FinancialInfo` properties via command line (`icacls C:\FinancialInfo`).
 6.  *Document:* (Use the template at the bottom).
 
 ---
