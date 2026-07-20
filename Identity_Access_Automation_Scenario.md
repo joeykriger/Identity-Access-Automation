@@ -2,31 +2,15 @@
 
 **Role Target:** Systems Administrator / Junior DevOps / IT Support Specialist
 
-**Objective:** To demonstrate competency in local identity management, file system permissions (NTFS & POSIX/ACLs), internal network configuration, and task automation using Python, all within isolated virtualized environments. 
+**Objective:** To demonstrate competency in local identity management, file system permissions (NTFS & POSIX/ACLs), and task automation using Python. 
 
 ## Skills Demonstrated
-*   **Networking:** Virtual network isolation (VirtualBox Internal Networks), static IP configuration, OSI Model troubleshooting.
 *   **Operating Systems:** Windows 11 Home & Ubuntu Linux Desktop management.
 *   **Security & Permissions:** NTFS inheritance manipulation, Linux standard permissions (chmod/chown) and Advanced Access Control Lists (ACLs).
 *   **Automation:** Python scripting (Standard Library) to programmatically manage OS-level users, groups, and permissions.
-*   **Troubleshooting:** CompTIA A+/Network+ 6-step methodology applied to network and script execution failures.
+*   **Troubleshooting:** CompTIA A+ 6-step methodology and OSI Model applied to script execution failures.
 
 ---
-
-## Lab Architecture & Prerequisites
-
-### Architecture Diagram
-```text
-[ Physical Host (Isolated, no host-to-guest traffic) ]
-      |
-      |-- VirtualBox Hypervisor
-            |
-            |=== [ Internal Network: "LabNet" ] ===|
-            |                                      |
-     [ Windows 11 Home VM ]                [ Ubuntu Desktop VM ]
-     IP: 192.168.10.20/24                  IP: 192.168.10.10/24
-     Gateway: None (Isolated)              Gateway: None (Isolated)
-```
 
 ### Prerequisites
 1.  **VirtualBox** installed on the host machine.
@@ -40,15 +24,9 @@
 
 **Scenario Context:** Windows 11 Home lacks the GUI "Local Users and Groups" snap-in (lusrmgr.msc) and advanced GUI security tabs for some folder settings. You must manage 3 new departmental users, group them into a `Finance` group, and establish a secured directory using Python.
 
-### Step 1: Virtual Machine & Network Setup
+### Step 1: Virtual Machine Setup
 1.  Create a Windows 11 VM in VirtualBox.
-2.  Under VM Settings -> Network:
-    *   Change Adapter 1 to **Internal Network**.
-    *   Set the Name to `LabNet`.
-3.  Boot the VM and complete the initial Windows setup.
-4.  **Networking Sabotage (Intentional):**
-    *   Set the IP manually, but use the wrong subnet mask (e.g., `255.255.255.128`) instead of `/24` (`255.255.255.0`).
-    *   *Do not fix this immediately. This is part of the troubleshooting lab.*
+2.  Boot the VM and complete the initial Windows setup.
 
 ### Step 2: The Python Automation Script
 Create a file named `win_setup.py` on the Desktop. This script uses the Python standard library to bypass Windows 11 Home GUI limitations.
@@ -94,16 +72,15 @@ if __name__ == "__main__":
 ```
 
 ### Step 3: Beginner Sabotage & Troubleshooting
-Before running the script, intentionally cause these issues:
-1.  **Sabotage 1 (Scripting - OSI Layer 7):** Do not run the command prompt or IDE as Administrator before executing the Python script.
-2.  **Sabotage 2 (Networking - OSI Layer 3):** Ping the Ubuntu VM (`192.168.10.10`). It will fail due to the subnet mask sabotage from Step 1.
+Before running the script, intentionally cause this issue:
+**Sabotage (Scripting - OSI Layer 7):** Do not run the command prompt or IDE as Administrator before executing the Python script.
 
 **Troubleshooting Exercise (Apply CompTIA Methodology):**
-1.  *Identify:* Script throws "Access is denied" errors; Ping to `192.168.10.10` returns "Destination host unreachable."
-2.  *Theory:* Lacking elevated privileges for `net user`; Subnet mask configuration isolates the host on Layer 3.
-3.  *Test:* Check `ipconfig /all`; right-click IDE and "Run as Administrator".
-4.  *Plan/Implement:* Correct Subnet mask to `255.255.255.0`; Re-run script from an elevated prompt.
-5.  *Verify:* Check `C:\FinanceData` properties via command line (`icacls C:\FinanceData`) and verify ping succeeds.
+1.  *Identify:* Script throws "Access is denied" errors.
+2.  *Theory:* Lacking elevated privileges for `net user`.
+3.  *Test:* Right-click IDE and "Run as Administrator".
+4.  *Plan/Implement:* Re-run script from an elevated prompt.
+5.  *Verify:* Check `C:\FinanceData` properties via command line (`icacls C:\FinanceData`).
 6.  *Document:* (Use the template at the bottom).
 
 ---
@@ -112,19 +89,13 @@ Before running the script, intentionally cause these issues:
 
 **Scenario Context:** You need to rapidly provision access for a development team on a Linux workstation. You will automate user creation, standard POSIX permissions, and advanced Access Control Lists (ACLs) using a Python standard library script.
 
-### Step 1: Virtual Machine & Network Setup
+### Step 1: Virtual Machine Setup
 1.  Create an Ubuntu Desktop VM in VirtualBox.
-2.  Under VM Settings -> Network:
-    *   Change Adapter 1 to **Internal Network**.
-    *   Set the Name to `LabNet`.
-3.  Boot the VM and configure the IP address dynamically, then move to static.
-4.  **Setup the static IP (`192.168.10.10/24`)**:
-    *   Edit Network connections via GUI or Netplan. 
+2.  Boot the VM.
 
 ### Step 2: Sabotage Setup
 Before running the script:
-1.  **Sabotage 1 (Networking - OSI Layer 1/2):** In VirtualBox settings for the Ubuntu VM, go to Network -> Advanced -> **Uncheck "Cable Connected"**.
-2.  **Sabotage 2 (Permissions - OSI Layer 7):** Create the python file, but remove read/execute permissions intentionally: `chmod 000 lin_setup.py`.
+**Sabotage (Permissions - OSI Layer 7):** Create the python file, but remove read/execute permissions intentionally: `chmod 000 lin_setup.py`.
 
 ### Step 3: The Python Automation Script
 Create `lin_setup.py`.
@@ -170,11 +141,11 @@ if __name__ == "__main__":
 ```
 
 ### Step 4: Troubleshooting Exercise
-1.  *Identify:* Cannot run `python3 lin_setup.py` (Permission denied); Cannot ping Windows VM at `192.168.10.20`.
-2.  *Theory:* `lin_setup.py` lacks read/execute bits. Virtual interface is down (Layer 1 physical link issue).
-3.  *Test:* Run `ls -l lin_setup.py`. Check interface status with `ip link show`.
-4.  *Plan/Implement:* `chmod 755 lin_setup.py`. Re-check "Cable Connected" in VirtualBox settings.
-5.  *Verify:* Ping Windows VM successfully. Run the script with `sudo python3 lin_setup.py` and verify `getfacl` output.
+1.  *Identify:* Cannot run `python3 lin_setup.py` (Permission denied).
+2.  *Theory:* `lin_setup.py` lacks read/execute bits.
+3.  *Test:* Run `ls -l lin_setup.py`.
+4.  *Plan/Implement:* `chmod 755 lin_setup.py`. 
+5.  *Verify:* Run the script with `sudo python3 lin_setup.py` and verify `getfacl` output.
 6.  *Document:* Complete the journal.
 
 ---
@@ -182,10 +153,7 @@ if __name__ == "__main__":
 ## Documentation & Evidence Requirements
 
 ### 1. Evidence Checklist (Screenshots for Portfolio)
-*   [ ] VirtualBox Network settings showing `LabNet` Internal Network for both VMs.
-*   [ ] Windows: Command Prompt showing successful `ping 192.168.10.10`.
 *   [ ] Windows: Output of `icacls C:\FinanceData` showing inheritance broken and explicit permissions.
-*   [ ] Linux: Terminal showing successful `ping 192.168.10.20`.
 *   [ ] Linux: Output of `getfacl /opt/devproject` showing base permissions and the `backup_svc` ACL.
 *   [ ] IDE/Terminal showing successful execution of both Python scripts.
 
@@ -194,12 +162,12 @@ if __name__ == "__main__":
 
 | CompTIA Step | Lab 1: Windows Connectivity Issue | Lab 2: Linux Script Execution Issue |
 | :--- | :--- | :--- |
-| **1. Identify the Problem** | Ping to 192.168.10.10 fails. | `python3 lin_setup.py` returns Permission Denied. |
-| **2. Establish Theory** | Incorrect IP configuration (OSI Layer 3). | Incorrect file permissions (OSI Layer 7). |
-| **3. Test Theory** | `ipconfig` shows mask as 255.255.255.128. | `ls -l` shows `----------`. |
-| **4. Plan & Implement** | Change subnet mask to 255.255.255.0. | Execute `chmod 744 lin_setup.py`. |
-| **5. Verify Functionality**| Ping succeeds. | Script executes and users are created. |
-| **6. Document Findings** | Issue resolved. Preventive action: Review IP deployment policies. | Issue resolved. Preventive action: Enforce default umask. |
+| **1. Identify the Problem** | `python3 lin_setup.py` returns Permission Denied. |
+| **2. Establish Theory** | Incorrect file permissions (OSI Layer 7). |
+| **3. Test Theory** | `ls -l` shows `----------`. |
+| **4. Plan & Implement** | Execute `chmod 744 lin_setup.py`. |
+| **5. Verify Functionality**| Script executes and users are created. |
+| **6. Document Findings** | Issue resolved. Preventive action: Enforce default umask. |
 
 ---
 
@@ -213,7 +181,6 @@ If publishing to GitHub, organize your repository as follows:
 │   ├── win_setup.py           # Windows automation script
 │   └── lin_setup.py           # Linux automation script
 ├── /evidence
-│   ├── network_config.png     # Ping tests and LabNet settings
 │   ├── win_permissions.png    # icacls output
 │   └── lin_acls.png           # getfacl output
 └── TROUBLESHOOTING.md         # Completed CompTIA methodology journal
