@@ -1,7 +1,5 @@
 # Portfolio Project: Systems Automation & Access Management Lab
 
-**Author:** Joseph Smith
-
 **Role Target:** Systems Administrator / Junior DevOps / IT Support Specialist
 
 **Objective:** To demonstrate competency in local identity management, file system permissions (NTFS & POSIX/ACLs), internal network configuration, and task automation using Python, all within isolated virtualized environments. 
