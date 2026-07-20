@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-def run_cmd(cmd:)
+def run_cmd(cmd):
     print(f"Executing: {' '.join(cmd)}")
     result = subprocess.run(cmd, capture_output = True, text = True)
     if result.returncode != 0:
