@@ -1,7 +1,7 @@
 Troubleshooting Journal
 
 | CompTIA Steps | Lab 2: Linux Script Execution Issue |
-
+| :--- | :--- |
 | **1. Identify the Problem** Permission denied when attempting to run `python3 scripts/lin_setup.py`. |
 
 | **2. Establish Theory** Permissions for `lin_setup.py` are misconfigured. |
