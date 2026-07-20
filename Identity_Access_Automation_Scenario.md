@@ -95,6 +95,7 @@ Before running the script, intentionally cause this issue:
 
 ### Step 2: Sabotage Setup
 Before running the script:
+
 **Sabotage (Permissions - OSI Layer 7):** Create the python file, but remove read/execute permissions intentionally: `chmod 000 lin_setup.py`.
 
 ### Step 3: The Python Automation Script
@@ -160,8 +161,8 @@ if __name__ == "__main__":
 ### 2. Troubleshooting Journal Template
 *Include this in your GitHub repository or Portfolio presentation to demonstrate your diagnostic methodology.*
 
-| CompTIA Step | Lab 1: Windows Connectivity Issue | Lab 2: Linux Script Execution Issue |
-| :--- | :--- | :--- |
+| CompTIA Step | "Lab 2: Linux Script Execution Issue" |
+| :--- | :--- |
 | **1. Identify the Problem** | `python3 lin_setup.py` returns Permission Denied. |
 | **2. Establish Theory** | Incorrect file permissions (OSI Layer 7). |
 | **3. Test Theory** | `ls -l` shows `----------`. |
